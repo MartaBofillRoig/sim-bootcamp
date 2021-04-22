@@ -11,7 +11,7 @@ Add here explanation about the bootcamp (?)
 
 0.2. Document all functions and files you create.
 
-## Simulation Tasks (2h)
+## Simulation Tasks
 
 ### Getting into the basics
 
@@ -126,6 +126,7 @@ in the rows the test procedure and in the columns the assumed means. Fix
 the standard deviation to a sensible value. Use ggplot and the
 facet\_grid() function.
 
-#### Shiny (Extra Tasks)
+#### Shiny and R package
 
-6.1. Implement function from Simulation.7) in Shiny 6.2. Bootstrap
+6.1. Implement function from Simulation.7) in Shiny 6.2. Create an R
+package with the function created in 5.1.
