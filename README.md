@@ -38,7 +38,7 @@ results in the vector “c”. (Hint: Use Binomial Distribution).
 variable with success probability p = 0.20 (“population d”). Save the
 results in the vector “d”.
 
-1.6. Use a chi^2-test to test the null hypothesis that the success
+1.6. Use a $\chi^2$-test to test the null hypothesis that the success
 probability of population c is the same as the success probability of
 population d. What is the p-value? What happens when you re-sample the
 vectors c and d? Which other test could be used to test this null
@@ -128,5 +128,7 @@ facet\_grid() function.
 
 #### Shiny and R package
 
-6.1. Implement function from Simulation.7) in Shiny 6.2. Create an R
+6.1. Implement function from Simulation.7) in Shiny 
+
+6.2. Create an R
 package with the function created in 5.1.
