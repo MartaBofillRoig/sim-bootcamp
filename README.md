@@ -1,9 +1,11 @@
 MUW Sim-Bootcamp
 ================
 
-Welcome to the Bootcamp!! This Bootcamp has been planned to introduce
-you to the design and implementation of simulation studies in clinical
-trials. Ideally, in the end, you will be able to:
+Welcome to the Bootcamp!!
+
+This Bootcamp has been planned to introduce you to the design and
+implementation of simulation studies in clinical trials. Ideally, in the
+end, you will be able to:
 
 -   program simple trial simulations using different endpoints;
 
@@ -13,8 +15,8 @@ trials. Ideally, in the end, you will be able to:
 -   understand the main idea behind any clinical trial simulation
     software.
 
-We also want to touch more advanced topics such as bootstrap, reporting
-and visualisation.
+We also want to touch more advanced topics such as reporting and
+visualisation.
 
 To share your doubts, organise yourselves, or simply stop for a coffee,
 here you will find the link to [Gather](https://gather.town/i/mkPDPA2h).
@@ -40,7 +42,7 @@ mean 4.8 and standard deviation 2 (population b). Save the results in
 the vector b.
 
 1.3. Use a t-test to test the null hypothesis that the mean of
-population a is the same as the mean of population b. What is
+population a is the same as the mean of population b. What is the
 interpretation of the p-value? What happens when you re-sample the
 vectors a and b?
 
