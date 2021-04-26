@@ -17,7 +17,7 @@ We also want to touch more advanced topics such as bootstrap, reporting
 and visualisation.
 
 To share your doubts, organise yourselves, or simply stop for a coffee,
-here you will find the link to [Gather](https://gather.town/i/BptBj3h4).
+here you will find the link to [Gather](https://gather.town/i/mkPDPA2h).
 
 ## GitHub Documents
 
