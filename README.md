@@ -25,7 +25,7 @@ here you will find the link to gather.: xx
 
 0.2. Document all functions and files you create.
 
-## Simulation Tasks
+## Task 1
 
 ### Getting into the basics
 
@@ -52,7 +52,7 @@ results in the vector “c”. (Hint: Use Binomial Distribution).
 variable with success probability p = 0.20 (“population d”). Save the
 results in the vector “d”.
 
-1.6. Use a $\chi^2$-test to test the null hypothesis that the success
+1.6. Use a \(\chi^2\)-test to test the null hypothesis that the success
 probability of population c is the same as the success probability of
 population d. What is the p-value? What happens when you re-sample the
 vectors c and d? Which other test could be used to test this null
@@ -84,6 +84,8 @@ type 1 error?
 
 2.4. For tasks 1.1 – 1.3, what happens with the power and type 1 error
 if we use a Wilcoxon test instead of a t Test?
+
+## Task 2
 
 ### Moving towards advanced concepts
 
@@ -142,7 +144,6 @@ facet\_grid() function.
 
 #### Shiny and R package
 
-6.1. Implement function from Simulation.7) in Shiny 
+6.1. Implement function from Simulation.7) in Shiny
 
-6.2. Create an R
-package with the function created in 5.1.
+6.2. Create an R package with the function created in 5.1.
