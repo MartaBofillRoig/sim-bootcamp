@@ -86,6 +86,6 @@ To share your doubts, organise yourselves, or simply stop for a coffee, here you
 
 #### Shiny and R package
 
-  6.1.	Implement everything from section 5 in Shiny.
+6.1.	Implement everything from section 5 in Shiny.
   
-  6.2.	Create an R package with the function created in 5.1.
+6.2.	Create an R package with the function created in 5.1.
