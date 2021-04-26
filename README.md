@@ -1,9 +1,23 @@
 MUW Sim-Bootcamp
 ================
 
-## Welcome\!
+Welcome to the Bootcamp\!\! This Bootcamp has been planned to introduce
+you to the design and implementation of simulation studies in clinical
+trials. Ideally, in the end, you will be able to:
 
-Add here explanation about the bootcamp (?)
+  - program simple trial simulations using different endpoints;
+
+  - use simulation to calculate required sample sizes or calibrate other
+    simulation parameters;
+
+  - understand the main idea behind any clinical trial simulation
+    software.
+
+We also want to touch more advanced topics such as bootstrap, reporting
+and visualisation.
+
+To share your doubts, organise yourselves, or simply stop for a coffee,
+here you will find the link to gather.: xx
 
 ## GitHub Documents
 
