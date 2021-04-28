@@ -1,0 +1,252 @@
+---
+title: "Shiny App Bootcamp"
+author: "Pavla, Dariga, Constantin"
+output: html_notebook
+runtime: shiny
+---
+```{r}
+#### SHINY does not work yet, I just uploaded it so that everyone can have a look if he/she wants.
+
+# Working on it tomorrow (29/04/2021)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+options(shiny.sanitize.errors = FALSE) 
+
+library(shiny)
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(shinyWidgets)
+library(plotly)
+
+
+```
+
+```{r, echo = FALSE}
+ # calculate the z-statistic
+  z_test <- function(x, y, sd=1, delta=0){
+  
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  # calculate the z-statistic
+  z_stat <- (mean(x) - mean(y) - delta) /
+    sqrt(sd^2/n_x + sd^2/n_y)
+  
+  
+  pvalue <- 1-pnorm(abs(z_stat))
+  #decision <- (pvalue < 0.05)
+  
+  return(list(z_stat=z_stat, p.value=pvalue))
+  }
+
+```
+
+```{r, echo = FALSE}
+sidebarPanel(
+  
+  sliderInput("samplesize", "Select Sample Size", min = 1, max = 1000, value = 100),
+  
+  numericInput("mean_x", 
+               "mean group 1", value = 0), 
+  
+  numericInput("mean_y", "mean group 2", value  = 0),
+  
+  numericInput("sd_x", "Standard deviation group 1", value = 1), 
+  
+  numericInput("sd_y", "Standard deviation group 2", value = 1),
+  
+  selectInput("test", "Which test do you want to use?", choices = c("t.test", "z.test", "wilcox.test")), 
+  
+  numericInput("n_sim", "How many simulation repetitions?", value = 1000),
+  
+  numericInput("alpha", "What alpha do you want?", value = 0.05, min = 0.001, max = 0.1),
+  
+  selectInput("sim_alpha", "Do you want to simulate alpha", choices = c("TRUE", "FALSE"))
+  
+)
+
+
+
+mainPanel( 
+  tabsetPanel(
+    
+    tabPanel("list",
+             
+             reactive({
+             
+             # run_trial <- function(input$samplesize, input$mean_x, input$mean_y, input$sd_x, input$sd_y, input$test, alpha=0.05, input$n_sim, sim_alpha=TRUE){
+               
+               decision <- rep(NA, input$n_sim)
+               for (i in 1:input$n_sim) {
+                 x <- rnorm(input$samplesize, mean = input$mean_x, sd = input$sd_x)
+                 y <- rnorm(input$samplesize, mean = input$mean_y, sd = input$sd_y)
+                 
+               
+                 
+                 
+                 
+                 n_x <- length(x)
+                 n_y <- length(y)
+  
+ 
+
+  
+
+                 if(input$test =="t.test"){
+                   test_res <- t.test(x, y)
+                 }
+                 
+                 if(input$test =="wilcox.test"){
+                   test_res <- wilcox.test(x, y)
+                 }
+                 
+                 if(input$test =="z.test"){
+                   test_res <- z_test(x, y, sd=input$sd_x)
+                 }
+                 
+                
+                 
+                 decision[i] <- (test_res$p.value < input$alpha)
+               }
+               
+               power <- mean(decision)
+               
+               if(input$sim_alpha){
+                 decision <- rep(NA, input$n_sim)
+                 for (i in 1:input$n_sim) {
+                   x <- rnorm(input$samplesize, mean = input$mean_x, sd = input$sd_x)
+                   y <- rnorm(input$samplesize, mean = input$mean_x, sd = input$sd_x)
+                   
+                   if(input$test=="t.test"){
+                     test_res <- t.test(x, y)
+                   }
+                   
+                   if(input$test=="wilcox.test"){
+                     test_res <- wilcox.test(x, y)
+                   }
+                   
+                   if(input$test=="z.test"){
+                     test_res <- z_test(x, y, sd=input$sd_x)
+                   }
+                   
+                   decision[i] <- (test_res$p.value < input$alpha)
+                 }
+                 
+                 alpha <- mean(decision)
+               } else {
+                 alpha = "not simulated"
+               }
+               
+               print(power)
+               print(alpha)
+               # return(list(power=power, alpha=alpha))
+               
+             #}
+             })
+             ),
+    
+    tabPanel("Plot",
+             
+             renderPlot({
+               plot(rnorm(input$samplesize), mean = 0, sd = 1)
+             }))
+  )
+  
+  
+  
+  
+  
+)
+
+
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+z_test <- function(x, y, sd=1, delta=0){
+  
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  # calculate the z-statistic
+  z_stat <- (mean(x) - mean(y) - delta) /
+    sqrt(sd^2/n_x + sd^2/n_y)
+  
+  
+  pvalue <- 1-pnorm(abs(z_stat))
+  #decision <- (pvalue < 0.05)
+  
+  return(list(z_stat=z_stat, p.value=pvalue))
+}
+
+
+
+
+run_trial <- function(n, mean_x, mean_y, sd_x, sd_y, test, alpha=0.05, n_sim, sim_alpha=TRUE){
+  
+  decision <- rep(NA, n_sim)
+  for (i in 1:n_sim) {
+    x <- rnorm(n, mean = mean_x, sd = sd_x)
+    y <- rnorm(n, mean = mean_y, sd = sd_y)
+    
+    if(test=="t.test"){
+      test_res <- t.test(x, y)
+    }
+    
+    if(test=="wilcox.test"){
+      test_res <- wilcox.test(x, y)
+    }
+    
+    if(test=="z.test"){
+      test_res <- z_test(x, y, sd=sd_x)
+    }
+    
+    decision[i] <- (test_res$p.value < alpha)
+  }
+  
+  power <- mean(decision)
+  
+  if(sim_alpha){
+    decision <- rep(NA, n_sim)
+    for (i in 1:n_sim) {
+      x <- rnorm(n, mean = mean_x, sd = sd_x)
+      y <- rnorm(n, mean = mean_x, sd = sd_x)
+      
+      if(test=="t.test"){
+        test_res <- t.test(x, y)
+      }
+      
+      if(test=="wilcox.test"){
+        test_res <- wilcox.test(x, y)
+      }
+      
+      if(test=="z.test"){
+        test_res <- z_test(x, y, sd=sd_x)
+      }
+      
+      decision[i] <- (test_res$p.value < alpha)
+    }
+    
+    alpha <- mean(decision)
+  } else {
+    alpha = "not simulated"
+  }
+  return(list(power=power, alpha=alpha))
+}
+```
+
+
+
+
