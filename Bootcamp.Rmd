@@ -1,0 +1,321 @@
+---
+title: "Simulation Bootcamp"
+author: ""
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: true
+    number_sections: true
+    code_folding: hide 
+    theme: readable
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  cache = T
+)
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+
+```{r}
+#set.seed(100)
+a <- rnorm(100, mean = 4, sd = 2)
+b <- rnorm(100, mean = 4.8, sd = 2)
+```
+
+
+
+```{r}
+t.test(a, b)
+wilcox.test(a, b)
+```
+
+```{r}
+# Power simulation normal distribution
+decision_t <- rep(NA, 1000)
+decision_w <- rep(NA, 1000)
+
+for (i in 1:1000) {
+  a <- rnorm(100, mean = 4, sd = 2)
+  b <- rnorm(100, mean = 4.8, sd = 2)
+  
+  t <- t.test(a, b)
+  w <- wilcox.test(a, b)
+  decision_t[i] <- (t$p.value < 0.05)
+  decision_w[i] <- (w$p.value < 0.05)
+}
+
+power_t <- mean(decision_t)
+power_w <- mean(decision_w)
+
+power_t; power_w
+```
+
+```{r}
+# Type I error simulation normal distribution
+decision_t <- rep(NA, 1000)
+decision_w <- rep(NA, 1000)
+
+for (i in 1:1000) {
+  a <- rnorm(100, mean = 4, sd = 2)
+  b <- rnorm(100, mean = 4, sd = 2)
+  
+  t <- t.test(a, b)
+  w <- wilcox.test(a, b)
+  decision_t[i] <- (t$p.value < 0.05)
+  decision_w[i] <- (w$p.value < 0.05)
+}
+
+alpha_t <- mean(decision_t)
+alpha_w <- mean(decision_w)
+
+alpha_t; alpha_w
+```
+
+
+
+```{r}
+# Power simulation log-normal distribution
+decision_t <- rep(NA, 1000)
+decision_w <- rep(NA, 1000)
+
+for (i in 1:1000) {
+  a <- rlnorm(100, meanlog = 4, sdlog = 2)
+  b <- rlnorm(100, meanlog = 4.8, sdlog = 2)
+  
+  t <- t.test(a, b)
+  w <- wilcox.test(a, b)
+  decision_t[i] <- (t$p.value < 0.05)
+  decision_w[i] <- (w$p.value < 0.05)
+}
+
+power_t <- mean(decision_t)
+power_w <- mean(decision_w)
+
+power_t; power_w
+```
+
+
+
+```{r}
+# Type I error simulation log-normal distribution
+decision_t <- rep(NA, 1000)
+decision_w <- rep(NA, 1000)
+
+for (i in 1:1000) {
+  a <- rlnorm(100, meanlog = 4, sdlog = 2)
+  b <- rlnorm(100, meanlog = 4, sdlog = 2)
+  
+  t <- t.test(a, b)
+  w <- wilcox.test(a, b)
+  decision_t[i] <- (t$p.value < 0.05)
+  decision_w[i] <- (w$p.value < 0.05)
+}
+
+alpha_t <- mean(decision_t)
+alpha_w <- mean(decision_w)
+
+alpha_t; alpha_w
+```
+
+```{r}
+z_test <- function(x, y, sd=1, delta=0){
+  
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  # calculate the z-statistic
+  z_stat <- (mean(x) - mean(y) - delta) / 
+    sqrt(sd^2/n_x + sd^2/n_y)
+  
+  
+  pvalue <- 1-pnorm(abs(z_stat))
+  #decision <- (pvalue < 0.05)
+  
+  return(list(z_stat=z_stat, p.value=pvalue))
+}
+```
+
+```{r}
+a <- rnorm(100, mean = 4, sd = 2)
+b <- rnorm(100, mean = 4.8, sd = 2)
+```
+
+
+
+```{r}
+z_test(a, b, sd=2)
+t.test(a, b)
+```
+
+
+```{r}
+# Power simulation log-normal distribution
+n_sim <- 200000
+decision_z <- rep(NA, n_sim)
+
+start_time <- Sys.time()
+for (i in 1:n_sim) {
+  a <- rnorm(100, mean = 4, sd = 2)
+  b <- rnorm(100, mean = 4.8, sd = 2)
+  
+  z <- z_test(a, b, sd = 2)
+  decision_z[i] <- (z$p.value < 0.05)
+}
+power_z <- mean(decision_z)
+runtime <- Sys.time() - start_time
+
+power_z; runtime
+```
+
+```{r}
+z_test_new <- function(mean_x, mean_y, n_x, n_y, sd=1, delta=0){
+  
+  # calculate the z-statistic
+  z_stat <- (mean_x - mean_y - delta) / 
+    sqrt(sd^2/n_x + sd^2/n_y)
+  
+  pvalue <- 1-pnorm(abs(z_stat))
+  #decision <- (pvalue < 0.05)
+  
+  return(list(z_stat=z_stat, p.value=pvalue))
+}
+```
+
+```{r}
+# Power simulation log-normal distribution
+n_sim <- 200000
+decision_z <- rep(NA, n_sim)
+n_x <- 10000
+n_y <- 10000
+
+start_time <- Sys.time()
+for (i in 1:n_sim) {
+  
+  mean_x <- rnorm(1, mean = 4, sd=2/sqrt(n_x))
+  mean_y <- rnorm(1, mean = 4.8, sd=2/sqrt(n_y))
+  
+  z <- z_test_new(mean_x, mean_y, n_x, n_y, sd = 2)
+  decision_z[i] <- (z$p.value < 0.05)
+}
+power_z <- mean(decision_z)
+runtime <- Sys.time() - start_time
+
+power_z; runtime
+```
+
+
+```{r}
+run_trial <- function(n, mean_x, mean_y, sd_x, sd_y, test, alpha=0.05, n_sim, sim_alpha=TRUE){
+  
+  decision <- rep(NA, n_sim)
+  for (i in 1:n_sim) {
+    x <- rnorm(n, mean = mean_x, sd = sd_x)
+    y <- rnorm(n, mean = mean_y, sd = sd_y)
+    
+    if(test=="t.test"){
+      test_res <- t.test(x, y)
+    }
+    
+    if(test=="wilcox.test"){
+      test_res <- wilcox.test(x, y)
+    }
+    
+    if(test=="z.test"){
+      test_res <- z_test(x, y, sd=sd_x)
+    }
+    
+    decision[i] <- (test_res$p.value < alpha)  
+  }
+  
+  power <- mean(decision)
+  
+  if(sim_alpha){
+    decision <- rep(NA, n_sim)
+    for (i in 1:n_sim) {
+      x <- rnorm(n, mean = mean_x, sd = sd_x)
+      y <- rnorm(n, mean = mean_x, sd = sd_x)
+      
+      if(test=="t.test"){
+        test_res <- t.test(x, y)
+      }
+      
+      if(test=="wilcox.test"){
+        test_res <- wilcox.test(x, y)
+      }
+      
+      if(test=="z.test"){
+        test_res <- z_test(x, y, sd=sd_x)
+      }
+      
+      decision[i] <- (test_res$p.value < alpha)  
+    }
+    
+    alpha <- mean(decision)
+  } else {
+    alpha = "not simulated"
+  }
+  return(list(power=power, alpha=alpha))
+}
+```
+
+
+```{r}
+run_trial(n=100, mean_x = 4, mean_y = 4.8, sd_x = 2, sd_y = 2, test = "wilcox.test", n_sim = 1000)
+```
+
+```{r}
+sample_sizes <- seq(100, 2000, by=100)
+df <- data.frame(power = rep(NA, length(sample_sizes)*3*3),
+                 alpha = rep(NA, length(sample_sizes)*3*3),
+                 sample_size = rep(sample_sizes, 3*3),
+                 test = rep(c("t.test", "z.test", "wilcox.test"), each=length(sample_sizes)*3),
+                 means = rep(c("4, 4.2", "4, 4.8", "4, 6"), each=length(sample_sizes), times=3),
+                 mean_x = 4,
+                 mean_y = rep(c(4.2, 4.8, 6), each=length(sample_sizes), times=3))
+
+start_time <- Sys.time()
+for (i in 1:nrow(df)) {
+  res <- run_trial(n=df$sample_size[i], mean_x = df$mean_x[i], mean_y = df$mean_y[i], sd_x = 2, sd_y = 2, test = df$test[i], n_sim = 1000)
+  df$power[i] <- res$power
+  df$alpha[i] <- res$alpha
+}
+
+runtime_all <- Sys.time() - start_time
+runtime_all
+```
+
+
+```{r, fig.height=10, fig.width=7}
+ggplot(df) +
+  geom_point(aes(sample_size, power), color="darkred") +
+  geom_line(aes(sample_size, power), color="darkred") +
+  geom_point(aes(sample_size, alpha), color="darkblue") +
+  geom_line(aes(sample_size, alpha), color="darkblue") +
+  facet_grid(rows = vars(test), cols = vars(df$means)) +
+  geom_hline(yintercept = 0.05) +
+  geom_hline(yintercept = 0.8)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
