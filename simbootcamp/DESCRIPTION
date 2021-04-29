@@ -2,7 +2,7 @@ Package: simbootcamp
 Title: Simulate a simple clinical trial
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Pavla",
+    c(person(given = "Pavla",
            family = "Krotka",
            role = c("aut", "cre"),
            email = "pavla.krotka@meduniwien.ac.at"),
@@ -13,7 +13,7 @@ Authors@R:
     person(given = "Dariga",
            family = "Ramazanova",
            role = c("aut", "cre"),
-           email = "dariga.ramazanova@meduniwien.ac.at"),
+           email = "dariga.ramazanova@meduniwien.ac.at"))
 Description: Simulate a simple clinical trial.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
