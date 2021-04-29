@@ -265,7 +265,7 @@ z_test <- function(x, y, sd, delta=0){
     sqrt(sd^2/n_x + sd^2/n_y)
   
   
-  pvalue <- 1-pnorm(abs(z_stat))
+  pvalue <- 2*(1-pnorm(abs(z_stat)))
   
   return(list(z_stat=z_stat, p.value=pvalue))
 }
@@ -315,7 +315,7 @@ z_test_new <- function(mean_x, mean_y, n_x, n_y, sd, delta=0){
   z_stat <- (mean_x - mean_y - delta) / 
     sqrt(sd^2/n_x + sd^2/n_y)
   
-  pvalue <- 1-pnorm(abs(z_stat))
+  pvalue <- 2*(1-pnorm(abs(z_stat)))
   
   return(list(z_stat=z_stat, p.value=pvalue))
 }
