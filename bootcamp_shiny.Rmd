@@ -1,0 +1,273 @@
+---
+title: "Shiny App Bootcamp"
+author: "Pavla, Dariga, Constantin"
+output: html_notebook
+runtime: shiny
+---
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(shiny)
+library(tidyverse)
+library(plotly)
+library(readr)
+library(ggplot2)
+
+# Read in dataset for visualizing effect of samplesize
+
+df <- read.csv("https://raw.githubusercontent.com/MartaBofillRoig/sim-bootcamp/main/samplesize_effect.csv")
+```
+
+
+
+```{r, echo = FALSE}
+ui <- fluidPage(
+  
+  
+  sidebarPanel(
+    
+    actionButton("go", "Go!"),
+    
+    numericInput("samplesize", "Select Sample Size", min = 1, max = 1000, value = 100, step = 50),
+    
+    numericInput("mean_x", 
+                 "mean group 1", value = 4, step = 0.1), 
+    
+    numericInput("mean_y", "mean group 2", value  = 4.8, step = 0.1),
+        
+    sliderInput("n_sim", "How many simulation repetitions?",min = 1, max = 10000, value = 100),
+
+    selectInput("test", "Which test do you want to use?", choices = c("t.test", "z.test", "wilcox.test")),
+    
+    numericInput("sd_x", "Standard deviation group 1", value = 1, min = 0.1, step = 0.1),
+    
+    numericInput("sd_y", "Standard deviation group 2", value = 1, min = 0.1, step = 0.1),
+    
+    numericInput("alpha", "What alpha do you want?", value = 0.05, min = 0.001, max = 0.1, step = 0.005),
+    
+    selectInput("sim_alpha", "Do you want to simulate the Type 1 Error?", choices = c("TRUE", "FALSE"))
+    
+    
+    
+    
+  ),
+  
+  
+  
+  mainPanel( 
+    tabsetPanel(
+      
+      tabPanel("Result",
+               
+               #plotOutput("plot"),
+               
+               textOutput("power"),
+               
+               textOutput("alpha")
+               
+      ),
+      
+      tabPanel("plot",
+               
+               plotOutput("effect")
+               
+               #textOutput("list")
+               
+      )
+      
+      
+      
+    )
+  )
+  
+)
+
+
+server <- function(input, output){
+  
+  
+  # z-test function
+  z_test <- function(x, y, sd=1, delta=0){
+    
+    n_x <- length(x)
+    n_y <- length(y)
+    
+    # calculate the z-statistic
+    z_stat <- (mean(x) - mean(y) - delta) /
+      sqrt(sd^2/n_x + sd^2/n_y)
+    
+    
+    pvalue <- 2*(1-pnorm(abs(z_stat)))
+    #decision <- (pvalue < 0.05)
+    
+    return(list(z_stat=z_stat, p.value=pvalue))
+  }
+  
+  
+  
+  
+  
+  
+  output$power <- renderText({
+    
+    input$go
+    
+    
+    n_sim <- isolate(input$n_sim)
+    samplesize <-  isolate(input$samplesize)
+    
+    mean_x <- isolate(input$mean_x)
+    
+    mean_y <- isolate(input$mean_y)
+    
+    sd_x <- isolate(input$sd_x)
+    
+    sd_y <- isolate(input$sd_y)
+    
+    test <- isolate(input$test)
+    
+    n_sim <- isolate(input$n_sim)
+    
+    alpha <- isolate(input$alpha)
+    
+    sim_alpha <- isolate(input$sim_alpha)
+    
+    
+    
+    decision <- rep(NA, n_sim)
+    
+    for(i in 1:n_sim){
+      x <- rnorm(samplesize, mean = mean_x, sd = sd_x)
+      y <- rnorm(samplesize, mean = mean_y, sd = sd_y)
+      
+      
+      if(test == "t.test"){
+        test_res <- t.test(x, y)$p.value
+      }
+      
+      if(test == "wilcox.test"){
+        test_res <- t.test(x, y)$p.value
+      }
+      
+      if(test == "z.test"){
+        test_res <- z_test(x, y, sd_x)$p.value
+      }
+      
+      decision[i] <- (test_res < alpha)
+      
+    }
+    
+    if(mean_x == mean_y){
+      paste("Type 1 Error: ", mean(decision))
+    } else{
+      paste("Power: ", mean(decision))
+    }
+  })
+  
+  output$alpha <- renderText({
+    
+    input$go
+    
+    samplesize <-  isolate(input$samplesize)
+    
+    mean_x <- isolate(input$mean_x)
+    
+    mean_y <- isolate(input$mean_y)
+    
+    sd_x <- isolate(input$sd_x)
+    
+    sd_y <- isolate(input$sd_y)
+    
+    test <- isolate(input$test)
+    
+    n_sim <- isolate(input$n_sim)
+    
+    alpha <- isolate(input$alpha)
+    
+    sim_alpha <- isolate(input$sim_alpha)
+    
+    if(sim_alpha){
+      
+      decision2 <- rep(NA, n_sim)
+      
+      for(i in 1:n_sim){
+        x <- rnorm(samplesize, mean = mean_x, sd = sd_x)
+        y <- rnorm(samplesize, mean = mean_x, sd = sd_x)
+        
+        
+        if(test == "t.test"){
+          test_res <- t.test(x, y)$p.value
+        }
+        
+        if(test == "wilcox.test"){
+          test_res <- t.test(x, y)$p.value
+        }
+        
+        if(test == "z.test"){
+          test_res <- z_test(x, y, sd_x)$p.value
+        }
+        
+        decision2[i] <- (test_res < alpha)
+        
+      }
+      
+      alpha <- mean(decision2)
+    } else{
+      alpha <- "not simulated"
+    }
+    
+    
+    paste("Type 1 Error:",
+          alpha)
+  })
+  
+  
+  output$effect <- renderPlot({
+    ggplot(df) +
+      geom_point(aes(sample_size, power), color="darkred") +
+      geom_line(aes(sample_size, power), color="darkred") +
+      geom_point(aes(sample_size, alpha), color="darkblue") +
+      geom_line(aes(sample_size, alpha), color="darkblue") +
+      facet_grid(rows = vars(test), cols = vars(df$means)) +
+      geom_abline(aes(intercept=0.8, slope=0), color="darkred", linetype="dashed") +
+      geom_abline(aes(intercept=0.05, slope=0), color="darkblue", linetype="dashed") +
+      labs(x="Sample size", y="Power (red) / Type I error (blue)")
+  })
+  
+  
+  #})
+  
+  
+  
+  
+  
+  
+}           
+
+
+shinyApp(ui, server)            
+```
+
+
+```{r, echo = FALSE}
+# calculate the z-statistic
+
+z_test <- function(x, y, sd=1, delta=0){
+  
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  # calculate the z-statistic
+  z_stat <- (mean(x) - mean(y) - delta) /
+    sqrt(sd^2/n_x + sd^2/n_y)
+  
+  
+  pvalue <- 1-pnorm(abs(z_stat))
+  #decision <- (pvalue < 0.05)
+  
+  return(list(z_stat=z_stat, p.value=pvalue))
+}
+
+```
+
+
