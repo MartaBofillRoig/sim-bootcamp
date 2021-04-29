@@ -290,6 +290,11 @@ runtime <- Sys.time() - start_time
 power_z; runtime
 ```
 
+# The ultimate challenge
+
+### Full Simulation Function
+
+5.1. Based on everything you have programmed so far, write a simulation function that calculates the rejection probability of a particular set of assumptions (sample sizes, means, standard deviations). This function takes the following input parameters: 1) Sample Sizes in both groups (assumed to be equal), 2) Means and Standard Deviations of both groups, 3) Choice of t-test, z-test or Wilcoxon test, 4) Number of simulation repetitions. The output should be the rejection probability of the statistical test.
 
 ```{r}
 run_trial <- function(n, mean_x, mean_y, sd_x, sd_y, test, alpha=0.05, n_sim, sim_alpha=TRUE){
