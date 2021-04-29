@@ -54,9 +54,9 @@ t.test(a, b)
 ```{r}
 n = 500
 p = 0.15
-c <- sample(0:1, size = n, replace = TRUE, prob = c(p, 1-p))
+c <- sample(0:1, size = n, replace = TRUE, prob = c(1-p, p))
 p = 0.2
-d <- sample(0:1, size = n, replace = TRUE, prob = c(p, 1-p))
+d <- sample(0:1, size = n, replace = TRUE, prob = c(1-p, p))
 ```
 
 1.6. Use a $\chi^{2}$-test to test the null hypothesis that the success probability of population c is the same as the success probability of population d. What is the p-value? What happens when you re-sample the vectors c and d? Which other test could be used to test this null hypothesis?
