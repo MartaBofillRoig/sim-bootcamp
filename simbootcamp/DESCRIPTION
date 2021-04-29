@@ -1,13 +1,20 @@
 Package: simbootcamp
-Title: What the Package Does (One Line, Title Case)
+Title: Simulate a simple clinical trial
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Pavla",
+           family = "Krotka",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "pavla.krotka@meduniwien.ac.at"),
+    person(given = "Constantin",
+           family = "Kumaus",
+           role = c("aut", "cre"),
+           email = "constantin.kumaus@meduniwien.ac.at"),
+    person(given = "Dariga",
+           family = "Ramazanova",
+           role = c("aut", "cre"),
+           email = "dariga.ramazanova@meduniwien.ac.at"),
+Description: Simulate a simple clinical trial.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Encoding: UTF-8
