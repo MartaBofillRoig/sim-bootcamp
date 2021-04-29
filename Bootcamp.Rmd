@@ -31,20 +31,6 @@ library(tidyverse)
 
 1.1. Simulate 100 realizations of a normally distributed variable with mean 4 and standard deviation 2 (population a). Save the results in the vector a.
 
-# Task 1.1
-mean.a <- 4
-sd.a <- 2
-mean.b <- 4.8
-sd.b <- 2
-
-# 1.1
-a <- rnorm(100, mean.a, sd.a)
-
-# 1.2
-b <- rnorm(100, mean.b, sd.b)
-
-# 1.3
-t.test(a, b)
 
 1.2. Simulate 100 realizations of a normally distributed variable with mean 4.8 and standard deviation 2 (population b). Save the results in the vector b.
 
