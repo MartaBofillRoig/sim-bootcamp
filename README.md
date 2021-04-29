@@ -95,8 +95,8 @@ we use a Wilcoxon test instead of a t Test?
 
 3.1. Write a function z\_test() that takes as input parameters 1) two
 vectors of observations x and y, 2) an assumed common standard deviation
-and 3) the mean difference corresponding to the null hypothesis (two
-sample z-Test formula can be found online
+and 3) the mean difference corresponding to the null hypothesis (delta)
+(two sample z-Test formula can be found online
 e.g. [here](https://www.cliffsnotes.com/study-guides/statistics/univariate-inferential-tests/two-sample-z-test-for-comparing-two-means)).
 The output should be a list including the test statistic and the
 p-value.
@@ -129,13 +129,13 @@ of repetitions.)
 #### Full Simulation Function
 
 5.1. Based on everything you have programmed so far, write a simulation
-function that calculates the power and type 1 error of a particular set
+function that calculates the rejection probability of a particular set
 of assumptions (sample sizes, means, standard deviations). This function
 takes the following input parameters: 1) Sample Sizes in both groups
 (assumed to be equal), 2) Means and Standard Deviations of both groups,
 3) Choice of t-test, z-test or Wilcoxon test, 4) Number of simulation
-repetitions. The output should be a list containing the type 1 error and
-power.
+repetitions. The output should be the rejection probability of the
+statistical test.
 
 5.2. Visualize the impact of the sample size, assumed means and test
 procedure on the power and type 1 error. On the y-axis, both power and
