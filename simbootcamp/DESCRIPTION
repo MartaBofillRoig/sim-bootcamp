@@ -8,11 +8,9 @@ Authors@R:
            email = "pavla.krotka@meduniwien.ac.at"),
     person(given = "Constantin",
            family = "Kumaus",
-           role = c("aut", "cre"),
            email = "constantin.kumaus@meduniwien.ac.at"),
     person(given = "Dariga",
            family = "Ramazanova",
-           role = c("aut", "cre"),
            email = "dariga.ramazanova@meduniwien.ac.at"))
 Description: Simulate a simple clinical trial.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
