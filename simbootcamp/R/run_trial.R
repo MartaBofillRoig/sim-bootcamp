@@ -18,7 +18,8 @@
 #' @param sim_alpha logical: whether the type 1 error must be simulated (default is TRUE)  
 #'
 #' @return List with power and type 1 error
-#'
+#' 
+#' @export
 
 
 run_trial <- function(n, mean_x, mean_y, sd_x, sd_y, test, alpha=0.05, n_sim, sim_alpha=TRUE){

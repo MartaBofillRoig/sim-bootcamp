@@ -10,6 +10,7 @@
 #'
 #' @return List with z-statistics and p-value
 #'
+#' @export
 
 z_test <- function(x, y, sd=1, delta=0){
 
